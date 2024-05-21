@@ -23,4 +23,65 @@ app.get("/restaurants", async (req, res) => {
 //     });
 // });
 
+app.get("/restaurants/:id", async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.params.id);
+    res.json(restaurant);
+});
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.post("/restaurants", async (req, res) => {
+    const restaurant = await Restaurant.create(req.body);
+    res.json(restaurant);
+});
+
+// to test used raw json in postman: 
+// {
+//     "name": "Opheem",
+//     "location": "Birmingham",
+//     "cuisine": "Fine Dining"
+// }
+
+// response once submitted:
+// {
+//     "id": 4,
+//     "name": "Opheem",
+//     "location": "Birmingham",
+//     "cuisine": "Fine Dining",
+//     "updatedAt": "2024-05-21T12:46:30.572Z",
+//     "createdAt": "2024-05-21T12:46:30.572Z"
+// }
+
+app.put("/restaurants/:id", async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.params.id);
+    await restaurant.update(req.body);
+    res.json(restaurant);
+});
+
+// to test used raw json in postman on restaurant/4: 
+// {
+//     "name": "Tapas Molecular Bar",
+//     "location": "Tokyo",
+//     "cuisine": "Fine Dining"
+// }
+
+// response once submitted:
+// {
+//     "id": 4,
+//     "name": "Tapas Molecular Bar",
+//     "location": "Tokyo",
+//     "cuisine": "Fine Dining",
+//     "createdAt": "2024-05-21T12:46:30.572Z",
+//     "updatedAt": "2024-05-21T12:49:14.630Z"
+// }
+
+app.delete("/restaurants/:id", async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.params.id);
+    await restaurant.destroy();
+    res.json(restaurant);
+});
+
+// deleted through postman with restaurant/4 response null after this on get request
+
 module.exports = app;
