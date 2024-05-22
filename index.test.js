@@ -1,3 +1,7 @@
+const { execSync } = require('child_process');
+execSync('npm install');
+execSync('npm run seed');
+
 const request = require('supertest');
 const app = require('./src/app.js');
 
