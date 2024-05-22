@@ -4,6 +4,7 @@ execSync('npm run seed');
 
 const request = require('supertest');
 const app = require('./src/app.js');
+const { Restaurant, Menu, Item } = require('./models/index');
 
 describe('/restaurants endpoint', () => {
     test("status is 200", async () => {

@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const Restaurant = require("../models/index")
+const { Restaurant, Menu, Item } = require("../models/index")
 const db = require("../db/connection");
 
 //TODO: Create your GET Request Route Below: 
@@ -8,7 +8,16 @@ const db = require("../db/connection");
 app.get("/restaurants", async (req, res) => {
 //     Get all restaurants via the Restaurant.findAll() method within the route.
 // Remember to use async and await
-    const restaurants = await Restaurant.findAll({});
+    const restaurants = await Restaurant.findAll({
+            include: {
+                model: Menu,
+                include: [
+                    {
+                        model: Item,
+                    }
+                ]
+            }
+        });
         // Send the restaurants as a JSON Response (res.json())
     res.json(restaurants);
 });
