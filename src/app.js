@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { Restaurant, Menu, Item } = require("../models/index")
 const db = require("../db/connection");
+const { check, validationResult } = require("express-validator");
 
 //TODO: Create your GET Request Route Below: 
 
@@ -40,9 +41,18 @@ app.get("/restaurants/:id", async (req, res) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/restaurants", async (req, res) => {
-    const restaurant = await Restaurant.create(req.body);
-    res.json(restaurant);
+app.post("/restaurants", [
+    check("name").notEmpty(options = { ignore_whitespace: true }),
+    check("location").notEmpty(options = { ignore_whitespace: true }),
+    check("cuisine").notEmpty(options = { ignore_whitespace: true })
+    ], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() });
+    } else {
+        const restaurant = await Restaurant.create(req.body);
+        res.status(200).json(restaurant);
+    }
 });
 
 // to test used raw json in postman: 
