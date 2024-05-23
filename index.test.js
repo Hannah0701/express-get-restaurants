@@ -59,7 +59,134 @@ describe('/restaurants endpoint', () => {
             cuisine: 'FastFood'
         };
         const response = await request(app).post("/restaurants").send(newRestaurant);
+        expect(response.status).toEqual(200);
         expect(response.body).toMatchObject(newRestaurant);
+    });
+
+    test("POST validation returns error when name is empty", async () => {
+        const newRestaurant = {
+            name: '',
+            location: 'Texas',
+            cuisine: 'FastFood'
+        };
+        const response = await request(app).post("/restaurants").send(newRestaurant);
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual({
+            errors: [
+                {
+                    value: '',
+                    msg: 'Invalid value',
+                    path: 'name',
+                    type: 'field',
+                    location: 'body'
+                }
+            ]
+        });
+    });
+
+    test("POST validation returns error when name is empty whitespace", async () => {
+        const newRestaurant = {
+            name: ' ',
+            location: 'Texas',
+            cuisine: 'FastFood'
+        };
+        const response = await request(app).post("/restaurants").send(newRestaurant);
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual({
+            errors: [
+                {
+                    value: ' ',
+                    msg: 'Invalid value',
+                    path: 'name',
+                    type: 'field',
+                    location: 'body'
+                }
+            ]
+        });
+    });
+
+    test("POST validation returns error when location is empty", async () => {
+        const newRestaurant = {
+            name: 'Burger King',
+            location: '',
+            cuisine: 'FastFood'
+        };
+        const response = await request(app).post("/restaurants").send(newRestaurant);
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual({
+            errors: [
+                {
+                    value: '',
+                    msg: 'Invalid value',
+                    path: 'location',
+                    type: 'field',
+                    location: 'body'
+                }
+            ]
+        });
+    });
+
+    test("POST validation returns error when location is empty whitespace", async () => {
+        const newRestaurant = {
+            name: 'Burger King',
+            location: ' ',
+            cuisine: 'FastFood'
+        };
+        const response = await request(app).post("/restaurants").send(newRestaurant);
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual({
+            errors: [
+                {
+                    value: ' ',
+                    msg: 'Invalid value',
+                    path: 'location',
+                    type: 'field',
+                    location: 'body'
+                }
+            ]
+        });
+    });
+
+    test("POST validation returns error when name is empty", async () => {
+        const newRestaurant = {
+            name: 'Burger King',
+            location: 'Texas',
+            cuisine: ''
+        };
+        const response = await request(app).post("/restaurants").send(newRestaurant);
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual({
+            errors: [
+                {
+                    value: '',
+                    msg: 'Invalid value',
+                    path: 'cuisine',
+                    type: 'field',
+                    location: 'body'
+                }
+            ]
+        });
+    });
+
+    test("POST validation returns error when name is empty whitespace", async () => {
+        const newRestaurant = {
+            name: 'Burger King',
+            location: 'Texas',
+            cuisine: ' '
+        };
+        const response = await request(app).post("/restaurants").send(newRestaurant);
+        expect(response.status).toEqual(400);
+        expect(response.body).toEqual({
+            errors: [
+                {
+                    value: ' ',
+                    msg: 'Invalid value',
+                    path: 'cuisine',
+                    type: 'field',
+                    location: 'body'
+                }
+            ]
+        });
     });
 
     test("PUT should update a restaurant", async () => {
