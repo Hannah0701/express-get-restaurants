@@ -1,0 +1,1 @@
+UPDATE menus SET restaurantId = 1 WHERE id = 1;
